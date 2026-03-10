@@ -22,7 +22,7 @@
 
 ```bash
 git clone <repo-url>
-cd front-end-Final-Project
+cd gigachat-client
 ```
 
 ### 2. Установить зависимости
@@ -83,5 +83,3 @@ src/
 ├── styles/      # Глобальные стили SCSS
 └── utils/       # Утилиты
 ```
-
-Подробный план реализации: [PLAN.md](./PLAN.md)
