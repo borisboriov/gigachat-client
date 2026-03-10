@@ -1,0 +1,55 @@
+.chatItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.45rem 0.6rem;
+  border-radius: 0.45rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease-out;
+}
+
+.chatItemActive {
+  background-color: rgba(16, 163, 127, 0.16);
+}
+
+.chatItem:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.textBlock {
+  min-width: 0;
+}
+
+.title {
+  font-size: 0.85rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.meta {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+}
+
+.actions {
+  display: flex;
+  gap: 0.25rem;
+  opacity: 0;
+  transition: opacity 0.1s ease-out;
+}
+
+.chatItem:hover .actions {
+  opacity: 1;
+}
+
+.iconButton {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+}
+

@@ -1,0 +1,29 @@
+@use './reset';
+
+:root {
+  --color-bg: #ffffff;
+  --color-bg-secondary: #f7f7f8;
+  --color-bg-sidebar: #f0f0f0;
+  --color-text: #0d0d0d;
+  --color-text-muted: #6b6b6b;
+  --color-border: #e5e5e5;
+  --color-accent: #10a37f;
+  --color-user-bubble: #dff0e8;
+}
+
+[data-theme='dark'] {
+  --color-bg: #212121;
+  --color-bg-secondary: #2f2f2f;
+  --color-bg-sidebar: #171717;
+  --color-text: #ececec;
+  --color-text-muted: #8e8ea0;
+  --color-border: #3f3f3f;
+  --color-accent: #19c37d;
+  --color-user-bubble: #2a4a3e;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+

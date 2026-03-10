@@ -1,0 +1,84 @@
+.messageRow {
+  display: flex;
+}
+
+.messageRowUser {
+  justify-content: flex-end;
+}
+
+.avatar {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 999px;
+  background-color: var(--color-bg-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  margin-right: 0.5rem;
+}
+
+.bubble {
+  max-width: 800px;
+  padding: 0.75rem 0.85rem;
+  border-radius: 0.75rem;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  background-color: var(--color-bg-secondary);
+}
+
+.bubbleUser {
+  background-color: var(--color-user-bubble);
+}
+
+.bubbleAssistant {
+  background-color: var(--color-bg-secondary);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.25rem;
+}
+
+.role {
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.timestamp {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+}
+
+.content {
+  font-size: 0.9rem;
+}
+
+.copyButton {
+  margin-top: 0.35rem;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  opacity: 0;
+  transition: opacity 0.1s ease-out;
+}
+
+.bubble:hover .copyButton {
+  opacity: 1;
+}
+
+.codeBlock {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  background-color: #111827;
+  color: #e5e7eb;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+    'Courier New', monospace;
+  font-size: 0.8rem;
+  overflow-x: auto;
+}
+
