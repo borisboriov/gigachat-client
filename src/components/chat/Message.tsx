@@ -1,4 +1,5 @@
 import type React from 'react';
+import type { ComponentPropsWithoutRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
@@ -37,7 +38,7 @@ export const Message: React.FC<MessageProps> = ({ message, variant }) => {
     try {
       await navigator.clipboard.writeText(message.content);
     } catch {
-      // без уведомлений на этом этапе
+      // clipboard error silently ignored
     }
   };
 
@@ -54,8 +55,9 @@ export const Message: React.FC<MessageProps> = ({ message, variant }) => {
             remarkPlugins={[remarkGfm]}
             rehypePlugins={[rehypeHighlight]}
             components={{
-              code({ inline, className, children, ...props }) {
-                if (inline) {
+              code({ node: _node, className, children, ...props }: ComponentPropsWithoutRef<'code'> & { node?: unknown }) {
+                const isInline = !className?.startsWith('language-');
+                if (isInline) {
                   return (
                     <code className={className} {...props}>
                       {children}

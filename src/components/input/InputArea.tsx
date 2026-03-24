@@ -6,10 +6,10 @@ interface InputAreaProps {
   value: string;
   onChange: (value: string) => void;
   onSubmit: () => void;
-  isDisabled?: boolean;
+  isLoading?: boolean;
 }
 
-export const InputArea: React.FC<InputAreaProps> = ({ value, onChange, onSubmit, isDisabled }) => {
+export const InputArea: React.FC<InputAreaProps> = ({ value, onChange, onSubmit, isLoading }) => {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   const handleAutoResize = () => {
@@ -22,7 +22,7 @@ export const InputArea: React.FC<InputAreaProps> = ({ value, onChange, onSubmit,
   const handleKeyDown: React.KeyboardEventHandler<HTMLTextAreaElement> = (event) => {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
-      if (!isDisabled && value.trim()) {
+      if (!isLoading && value.trim()) {
         onSubmit();
       }
     }
@@ -36,7 +36,7 @@ export const InputArea: React.FC<InputAreaProps> = ({ value, onChange, onSubmit,
     handleAutoResize();
   };
 
-  const canSend = !isDisabled && value.trim().length > 0;
+  const canSend = !isLoading && value.trim().length > 0;
 
   return (
     <div className={styles.inputContainer}>
@@ -51,6 +51,7 @@ export const InputArea: React.FC<InputAreaProps> = ({ value, onChange, onSubmit,
           aria-label="Введите сообщение"
           onChange={handleChange}
           onKeyDown={handleKeyDown}
+          disabled={isLoading}
         />
         <div className={styles.actions}>
           <button

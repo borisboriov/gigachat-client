@@ -1,4 +1,5 @@
 import type React from 'react';
+import { useEffect, useRef } from 'react';
 import type { Message as MessageType } from '../../types';
 import { Message } from './Message';
 import { TypingIndicator } from './TypingIndicator';
@@ -10,6 +11,12 @@ interface MessageListProps {
 }
 
 export const MessageList: React.FC<MessageListProps> = ({ messages, showTypingIndicator }) => {
+  const endRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    endRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages, showTypingIndicator]);
+
   return (
     <div
       className={styles.messageList}
@@ -27,9 +34,10 @@ export const MessageList: React.FC<MessageListProps> = ({ messages, showTypingIn
 
       {showTypingIndicator && (
         <div className={styles.typingWrapper}>
-          <TypingIndicator isVisible />
+          <TypingIndicator isVisible={showTypingIndicator} />
         </div>
       )}
+      <div ref={endRef} />
     </div>
   );
 };
