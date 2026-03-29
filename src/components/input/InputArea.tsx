@@ -6,10 +6,11 @@ interface InputAreaProps {
   value: string;
   onChange: (value: string) => void;
   onSubmit: () => void;
+  onStop?: () => void;
   isLoading?: boolean;
 }
 
-export const InputArea: React.FC<InputAreaProps> = ({ value, onChange, onSubmit, isLoading }) => {
+export const InputArea: React.FC<InputAreaProps> = ({ value, onChange, onSubmit, onStop, isLoading }) => {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   const handleAutoResize = () => {
@@ -51,38 +52,32 @@ export const InputArea: React.FC<InputAreaProps> = ({ value, onChange, onSubmit,
           aria-label="Введите сообщение"
           onChange={handleChange}
           onKeyDown={handleKeyDown}
-          disabled={isLoading}
         />
         <div className={styles.actions}>
-          <button
-            type="button"
-            className={styles.iconButton}
-            aria-label="Прикрепить изображение"
-            disabled
-          >
-            📎
-          </button>
-          <button
-            type="button"
-            className={`${styles.iconButton}`}
-            aria-label="Остановить генерацию"
-            disabled
-          >
-            ⏹
-          </button>
-          <button
-            type="button"
-            className={`${styles.sendButton} ${!canSend ? styles.sendButtonDisabled : ''}`}
-            onClick={() => {
-              if (canSend) {
-                onSubmit();
-              }
-            }}
-            disabled={!canSend}
-            aria-label="Отправить сообщение"
-          >
-            ⮞
-          </button>
+          {isLoading ? (
+            <button
+              type="button"
+              className={`${styles.sendButton} ${styles.stopButton}`}
+              aria-label="Остановить генерацию"
+              onClick={onStop}
+            >
+              ⏹
+            </button>
+          ) : (
+            <button
+              type="button"
+              className={`${styles.sendButton} ${!canSend ? styles.sendButtonDisabled : ''}`}
+              onClick={() => {
+                if (canSend) {
+                  onSubmit();
+                }
+              }}
+              disabled={!canSend}
+              aria-label="Отправить сообщение"
+            >
+              ⮞
+            </button>
+          )}
         </div>
       </div>
       <div className={styles.hint}>Enter — отправить, Shift+Enter — новая строка</div>

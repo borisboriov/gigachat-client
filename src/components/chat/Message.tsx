@@ -1,5 +1,5 @@
 import type React from 'react';
-import type { ComponentPropsWithoutRef } from 'react';
+import { type ComponentPropsWithoutRef, useState, useRef, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
@@ -13,6 +13,16 @@ interface MessageProps {
 
 export const Message: React.FC<MessageProps> = ({ message, variant }) => {
   const isUser = variant === 'user';
+  const [copied, setCopied] = useState(false);
+  const timerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current !== null) {
+        window.clearTimeout(timerRef.current);
+      }
+    };
+  }, []);
 
   const rowClassName = [
     styles.messageRow,
@@ -37,6 +47,11 @@ export const Message: React.FC<MessageProps> = ({ message, variant }) => {
     if (!navigator.clipboard) return;
     try {
       await navigator.clipboard.writeText(message.content);
+      setCopied(true);
+      timerRef.current = window.setTimeout(() => {
+        timerRef.current = null;
+        setCopied(false);
+      }, 2000);
     } catch {
       // clipboard error silently ignored
     }
@@ -77,10 +92,12 @@ export const Message: React.FC<MessageProps> = ({ message, variant }) => {
             {message.content}
           </ReactMarkdown>
         </div>
-        <button type="button" className={styles.copyButton} onClick={handleCopy}>
-          <span>⧉</span>
-          <span>Копировать</span>
-        </button>
+        {!isUser && (
+          <button type="button" className={styles.copyButton} onClick={handleCopy}>
+            <span>{copied ? '✓' : '⧉'}</span>
+            <span>{copied ? 'Скопировано' : 'Копировать'}</span>
+          </button>
+        )}
       </div>
     </div>
   );

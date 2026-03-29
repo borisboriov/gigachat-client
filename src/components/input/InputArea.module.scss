@@ -52,6 +52,10 @@
   cursor: not-allowed;
 }
 
+.stopButton {
+  background-color: var(--color-text-muted);
+}
+
 .hint {
   font-size: 0.7rem;
   color: var(--color-text-muted);

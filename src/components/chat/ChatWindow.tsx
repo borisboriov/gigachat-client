@@ -5,6 +5,7 @@ import { MessageList } from './MessageList';
 import { EmptyState } from './EmptyState';
 import { InputArea } from '../input/InputArea';
 import { SettingsPanel, type UserSettings } from '../settings/SettingsPanel';
+import { Toggle } from '../ui/Toggle';
 import styles from './ChatWindow.module.scss';
 
 const MOCK_RESPONSES = [
@@ -43,6 +44,14 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ title }) => {
     };
   }, []);
 
+  const handleStop = () => {
+    if (timerRef.current !== null) {
+      window.clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+    setIsLoading(false);
+  };
+
   const handleSubmit = () => {
     const value = input.trim();
     if (!value || isLoading) {
@@ -80,14 +89,17 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ title }) => {
     <div className={styles.chatWindow}>
       <header className={styles.header}>
         <div className={styles.title}>{title}</div>
-        <button
-          type="button"
-          className={styles.settingsButton}
-          aria-label="Открыть настройки"
-          onClick={() => setIsSettingsOpen(true)}
-        >
-          ⚙
-        </button>
+        <div className={styles.headerActions}>
+          <Toggle />
+          <button
+            type="button"
+            className={styles.settingsButton}
+            aria-label="Открыть настройки"
+            onClick={() => setIsSettingsOpen(true)}
+          >
+            ⚙
+          </button>
+        </div>
       </header>
 
       <div className={styles.body}>
@@ -103,6 +115,7 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ title }) => {
             value={input}
             onChange={setInput}
             onSubmit={handleSubmit}
+            onStop={handleStop}
             isLoading={isLoading}
           />
         </div>

@@ -18,6 +18,12 @@
   font-weight: 500;
 }
 
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .settingsButton {
   display: inline-flex;
   align-items: center;
