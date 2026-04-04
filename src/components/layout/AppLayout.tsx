@@ -1,33 +1,22 @@
 import type React from 'react';
-import { useMemo } from 'react';
+import { useAppStore } from '../../store';
 import styles from './AppLayout.module.scss';
 
 interface AppLayoutProps {
-  isSidebarOpen: boolean;
-  onToggleSidebar: () => void;
   sidebar: React.ReactNode;
   children: React.ReactNode;
 }
 
-export const AppLayout: React.FC<AppLayoutProps> = ({
-  isSidebarOpen,
-  onToggleSidebar,
-  sidebar,
-  children,
-}) => {
-  const sidebarClassName = useMemo(
-    () =>
-      [
-        styles.sidebar,
-        isSidebarOpen ? styles.sidebarOpen : '',
-      ]
-        .filter(Boolean)
-        .join(' '),
-    [isSidebarOpen],
-  );
+export const AppLayout: React.FC<AppLayoutProps> = ({ sidebar, children }) => {
+  const isSidebarOpen = useAppStore((s) => s.ui.isSidebarOpen);
+  const toggleSidebar = useAppStore((s) => s.toggleSidebar);
+
+  const sidebarClassName = [styles.sidebar, isSidebarOpen ? styles.sidebarOpen : '']
+    .filter(Boolean)
+    .join(' ');
 
   return (
-    <div className={styles.appLayout} data-theme="light">
+    <div className={styles.appLayout}>
       <aside className={sidebarClassName}>{sidebar}</aside>
 
       {isSidebarOpen && (
@@ -35,7 +24,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
           type="button"
           className={styles.backdrop}
           aria-label="Закрыть список чатов"
-          onClick={onToggleSidebar}
+          onClick={toggleSidebar}
         />
       )}
 
@@ -44,7 +33,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
           <button
             type="button"
             className={styles.burgerButton}
-            onClick={onToggleSidebar}
+            onClick={toggleSidebar}
             aria-label="Открыть список чатов"
           >
             ☰
@@ -56,4 +45,3 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
     </div>
   );
 };
-
