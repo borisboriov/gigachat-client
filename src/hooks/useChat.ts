@@ -1,4 +1,4 @@
-import { useRef, useCallback } from 'react';
+import { useRef, useCallback, useState } from 'react';
 import { useAppStore } from '../store';
 import { chatAPI } from '../api/gigachat';
 import type { ApiMessage } from '../api/types';
@@ -18,11 +18,16 @@ export function useChat(chatId: string | undefined, options: UseChatOptions) {
   const setStreaming = useAppStore((s) => s.setStreaming);
   const isStreaming = useAppStore((s) => s.streaming.isStreaming);
 
+  const [error, setError] = useState<string | null>(null);
+  const lastContentRef = useRef<string>('');
   const abortRef = useRef<AbortController | null>(null);
 
   const send = useCallback(
     async (userContent: string) => {
       if (!chatId || isStreaming) return;
+      setError(null);
+
+      lastContentRef.current = userContent;
 
       const userMessage: Message = {
         id: crypto.randomUUID(),
@@ -79,6 +84,7 @@ export function useChat(chatId: string | undefined, options: UseChatOptions) {
         if (err instanceof DOMException && err.name === 'AbortError') {
           // stopped by user
         } else {
+          setError('Не удалось получить ответ от GigaChat. Попробуйте ещё раз.');
           const chat = useAppStore.getState().chats.find((c) => c.id === chatId);
           const msg = chat?.messages.find((m) => m.id === assistantMessageId);
           if (msg && !msg.content) {
@@ -97,5 +103,11 @@ export function useChat(chatId: string | undefined, options: UseChatOptions) {
     abortRef.current?.abort();
   }, []);
 
-  return { send, stop, isStreaming };
+  const retry = useCallback(() => {
+    if (lastContentRef.current) {
+      void send(lastContentRef.current);
+    }
+  }, [send]);
+
+  return { send, stop, retry, isStreaming, error };
 }

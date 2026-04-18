@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import type React from 'react';
 import type { Chat } from '../../types';
 import styles from './ChatItem.module.scss';
@@ -10,7 +11,7 @@ interface ChatItemProps {
   onDelete: () => void;
 }
 
-export const ChatItem: React.FC<ChatItemProps> = ({
+const ChatItemComponent: React.FC<ChatItemProps> = ({
   chat,
   isActive,
   onSelect,
@@ -74,4 +75,6 @@ export const ChatItem: React.FC<ChatItemProps> = ({
     </div>
   );
 };
+
+export const ChatItem = memo(ChatItemComponent);
 

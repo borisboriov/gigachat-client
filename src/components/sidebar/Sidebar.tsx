@@ -1,5 +1,5 @@
 import type React from 'react';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../store';
 import { ChatItem } from './ChatItem';
@@ -36,23 +36,23 @@ export const Sidebar: React.FC = () => {
 
   const modalTargetChat = chats.find((c) => c.id === modalTargetChatId);
 
-  const handleNewChat = () => {
+  const handleNewChat = useCallback(() => {
     const id = createChat();
     navigate(`/chat/${id}`);
     if (window.innerWidth < 768) {
       setSidebarOpen(false);
     }
-  };
+  }, [createChat, navigate, setSidebarOpen]);
 
-  const handleSelectChat = (id: string) => {
+  const handleSelectChat = useCallback((id: string) => {
     setActiveChat(id);
     navigate(`/chat/${id}`);
     if (window.innerWidth < 768) {
       setSidebarOpen(false);
     }
-  };
+  }, [setActiveChat, navigate, setSidebarOpen]);
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = useCallback(() => {
     if (!modalTargetChatId) return;
     const wasActive = activeChatId === modalTargetChatId;
     deleteChat(modalTargetChatId);
@@ -64,12 +64,12 @@ export const Sidebar: React.FC = () => {
         navigate('/');
       }
     }
-  };
+  }, [modalTargetChatId, activeChatId, deleteChat, chats, navigate]);
 
-  const handleConfirmRename = (newTitle: string) => {
+  const handleConfirmRename = useCallback((newTitle: string) => {
     if (!modalTargetChatId) return;
     renameChat(modalTargetChatId, newTitle);
-  };
+  }, [modalTargetChatId, renameChat]);
 
   return (
     <>

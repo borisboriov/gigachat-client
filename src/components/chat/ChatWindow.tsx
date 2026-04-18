@@ -1,14 +1,20 @@
 import type React from 'react';
-import { useEffect, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../store';
 import { useChat } from '../../hooks/useChat';
 import { MessageList } from './MessageList';
 import { EmptyState } from './EmptyState';
 import { InputArea } from '../input/InputArea';
-import { SettingsPanel, type UserSettings } from '../settings/SettingsPanel';
 import { Toggle } from '../ui/Toggle';
+import { ErrorBoundary } from '../ui/ErrorBoundary';
+import { ErrorMessage } from '../ui/ErrorMessage';
+import type { UserSettings } from '../settings/SettingsPanel';
 import styles from './ChatWindow.module.scss';
+
+const SettingsPanel = lazy(() =>
+  import('../settings/SettingsPanel').then((m) => ({ default: m.SettingsPanel })),
+);
 
 export const ChatWindow: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -28,7 +34,7 @@ export const ChatWindow: React.FC = () => {
     theme: 'light',
   });
 
-  const { send, stop, isStreaming } = useChat(id, {
+  const { send, stop, retry, isStreaming, error } = useChat(id, {
     model: settings.model,
     temperature: settings.temperature,
     topP: settings.topP,
@@ -44,12 +50,19 @@ export const ChatWindow: React.FC = () => {
     if (id && !chat) navigate('/', { replace: true });
   }, [id, chat, navigate]);
 
-  const handleSubmit = () => {
+  const handleSubmit = useCallback(() => {
     const value = input.trim();
     if (!value || isStreaming) return;
     setInput('');
-    send(value);
-  };
+    void send(value);
+  }, [input, isStreaming, send]);
+
+  const handleOpenSettings = useCallback(() => setIsSettingsOpen(true), []);
+  const handleCloseSettings = useCallback(() => setIsSettingsOpen(false), []);
+  const handleSaveSettings = useCallback((next: UserSettings) => {
+    setSettings(next);
+    setIsSettingsOpen(false);
+  }, []);
 
   if (!chat) return null;
 
@@ -65,7 +78,7 @@ export const ChatWindow: React.FC = () => {
             type="button"
             className={styles.settingsButton}
             aria-label="Открыть настройки"
-            onClick={() => setIsSettingsOpen(true)}
+            onClick={handleOpenSettings}
           >
             ⚙
           </button>
@@ -74,13 +87,16 @@ export const ChatWindow: React.FC = () => {
 
       <div className={styles.body}>
         <div className={styles.messagesWrapper}>
-          {hasMessages ? (
-            <MessageList messages={chat.messages} showTypingIndicator={isStreaming} />
-          ) : (
-            <EmptyState />
-          )}
+          <ErrorBoundary>
+            {hasMessages ? (
+              <MessageList messages={chat.messages} showTypingIndicator={isStreaming} />
+            ) : (
+              <EmptyState />
+            )}
+          </ErrorBoundary>
         </div>
         <div className={styles.inputWrapper}>
+          {error && <ErrorMessage message={error} onRetry={retry} />}
           <InputArea
             value={input}
             onChange={setInput}
@@ -91,15 +107,14 @@ export const ChatWindow: React.FC = () => {
         </div>
       </div>
 
-      <SettingsPanel
-        isOpen={isSettingsOpen}
-        settings={settings}
-        onClose={() => setIsSettingsOpen(false)}
-        onSave={(next) => {
-          setSettings(next);
-          setIsSettingsOpen(false);
-        }}
-      />
+      <Suspense fallback={null}>
+        <SettingsPanel
+          isOpen={isSettingsOpen}
+          settings={settings}
+          onClose={handleCloseSettings}
+          onSave={handleSaveSettings}
+        />
+      </Suspense>
     </div>
   );
 };

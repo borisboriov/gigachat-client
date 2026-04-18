@@ -1,6 +1,6 @@
 .error {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 0.7rem;
   border-radius: 0.5rem;
@@ -11,5 +11,26 @@
 
 .icon {
   font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.text {
+  flex: 1;
+}
+
+.retryButton {
+  flex-shrink: 0;
+  padding: 0.2rem 0.6rem;
+  border-radius: 0.3rem;
+  border: 1px solid #991b1b;
+  background: transparent;
+  color: #991b1b;
+  font-size: 0.8rem;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #991b1b;
+    color: #fff;
+  }
 }
 

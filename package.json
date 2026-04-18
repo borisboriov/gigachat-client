@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "analyze": "npx vite-bundle-visualizer"
   },
   "dependencies": {
     "highlight.js": "^11.10.0",

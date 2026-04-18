@@ -3,9 +3,10 @@ import styles from './ErrorMessage.module.scss';
 
 interface ErrorMessageProps {
   message: string;
+  onRetry?: () => void;
 }
 
-export const ErrorMessage: React.FC<ErrorMessageProps> = ({ message }) => {
+export const ErrorMessage: React.FC<ErrorMessageProps> = ({ message, onRetry }) => {
   if (!message) {
     return null;
   }
@@ -13,7 +14,12 @@ export const ErrorMessage: React.FC<ErrorMessageProps> = ({ message }) => {
   return (
     <div className={styles.error} role="alert">
       <span className={styles.icon}>⚠️</span>
-      <span>{message}</span>
+      <span className={styles.text}>{message}</span>
+      {onRetry && (
+        <button type="button" className={styles.retryButton} onClick={onRetry}>
+          Повторить
+        </button>
+      )}
     </div>
   );
 };
