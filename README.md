@@ -6,11 +6,7 @@
 
 ## Демо
 
-<!-- Добавьте публичную ссылку после деплоя: -->
-> **Live:** https://your-deployment-url.vercel.app
-
-<!-- Добавьте скриншоты или запись экрана: -->
-> Скриншоты и запись работы приложения → папка [`docs/`](./docs/)
+> **Live:** https://gigachat-client-git-main-borisboriov-projects.vercel.app
 
 ---
 
@@ -81,8 +77,8 @@ npm run analyze    # Анализ размера бандла (vite-bundle-visua
 
 | Переменная | Обязательная | Описание |
 |---|---|---|
-| `VITE_GIGACHAT_CLIENT_ID` | Да | Client ID из личного кабинета Sber Developers |
-| `VITE_GIGACHAT_CLIENT_SECRET` | Да | Client Secret для OAuth-авторизации |
+| `VITE_GIGACHAT_AUTH_KEY` | Да | Base64 от `client_id:client_secret` из Sber Developers |
+| `VITE_GIGACHAT_SCOPE` | Да | `GIGACHAT_API_PERS` / `GIGACHAT_API_B2B` / `GIGACHAT_API_CORP` |
 | `VITE_USE_MOCK` | Нет | `true` — использовать мок-адаптер (без API), `false` — реальный GigaChat |
 
 Получить ключи: https://developers.sber.ru/portal/products/gigachat
