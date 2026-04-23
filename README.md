@@ -8,6 +8,10 @@
 
 > **Live:** https://gigachat-client.vercel.app
 
+![Главный экран](./docs/main.png)
+![Список чатов](./docs/chats.png)
+![Анализ бандла](./docs/bundle.png)
+
 ---
 
 ## Стек
