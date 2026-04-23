@@ -6,7 +6,7 @@
 
 ## Демо
 
-> **Live:** https://gigachat-client-git-main-borisboriov-projects.vercel.app
+> **Live:** https://gigachat-client.vercel.app
 
 ---
 
